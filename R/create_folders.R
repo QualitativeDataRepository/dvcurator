@@ -45,7 +45,7 @@ download_files <- function (data) {
   fileids <- data[['files']]$id
   # Implement Zip download from DV while not available through client
   fileids <- paste0(fileids, collapse = ",")
-  u <- paste0(api_url(), "access/datafiles/", fileids)
+  u <- paste0(api_url(), "access/datafiles/", fileids, "?format=original")
   r <-
     httr::GET(u, httr::add_headers("X-Dataverse-key" = Sys.getenv("DATAVERSE_KEY")))
   httr::stop_for_status(r)
