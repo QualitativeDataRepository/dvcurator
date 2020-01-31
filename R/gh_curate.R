@@ -6,9 +6,9 @@ library(stringr)
 
 #' Creates issues and projects in the QDR Github repository
 #'
-#' @param doi
-#'
-#' @return
+#' @param doi A string. The doi of a davaser dataset in the form doi:10.1234/5678
+#' @param owner A string. The owner of the github repository
+#' @param repo A string. The name of the github repo
 #' @export
 #' @import gh
 #' @import stringr
@@ -26,7 +26,8 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   metadata_text <- 'Not all of these need to be completed, but check if available/possible
 
   - [ ] Funder
-  - [ ] ORCID
+  - [ ] depositor ORCID
+  - [ ] Check depositor affiliation
   - [ ] Other contributors
   - [ ] Associated publications
   - [ ] Collection dates
@@ -34,10 +35,10 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   - [ ] Geographic coverage
   - [ ] Project Summary: Abstract
   - [ ] Data Abstract:
-  - [ ] What are the data (interviews, focus groups, PDFs of XYZ)?
-  - [ ] How where data selected (e.g., picking interviewees, selection among archival documents, etc.)?
-  - [ ] Data collections strategy: both technical (scans/camera) and more substantial (interview/focus groups) -- though full guide should be separate document
-  - [ ] How are they organized / will be organized for publication.
+     - [ ] What are the data (interviews, focus groups, PDFs of XYZ)?
+     - [ ] How where data selected (e.g., picking interviewees, selection among archival documents, etc.)?
+     - [ ] Data collections strategy: both technical (scans/camera) and more substantial (interview/focus groups) -- though full guide should be separate document
+     - [ ] How are they organized / will be organized for publication.
   - [ ] Access restrictions: on which files, under what conditions.
   '
 
@@ -84,8 +85,10 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   - [ ] Upload files
   - [ ] Tag Data/Documentation
   - [ ] Authorize file access to registered users
+  - [ ] Add terms in both terms of use and terms of access
   - [ ] Restrict files for registered users as required
   - [ ] Deposit agreement received from depositor
+  - [ ] Add distribution date
   - [ ] Depositor Final Review"
 
 publication_title <- paste(get_author(data), " - ", short_title," - ", "Publication")

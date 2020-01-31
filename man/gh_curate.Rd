@@ -7,10 +7,11 @@
 gh_curate(doi, owner = "QualitativeDataRepository", repo = "Project-Curation")
 }
 \arguments{
-\item{doi}{}
-}
-\value{
+\item{doi}{A string. The doi of a davaser dataset in the form doi:10.1234/5678}
 
+\item{owner}{A string. The owner of the github repository}
+
+\item{repo}{A string. The name of the github repo}
 }
 \description{
 Creates issues and projects in the QDR Github repository

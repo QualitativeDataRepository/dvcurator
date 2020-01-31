@@ -16,5 +16,8 @@ short_title, a string.
 Removes "Data for:" and "Replication Data for:" and uses the first five words for the title or the title up to the first colon, whichvever comes first.
 }
 \examples{
-short_title <- get_shortTitle("Data for: From Pews to Politics: Religious Sermons and Political Participation in Africa")
+short_title <- get_shortTitle(
+  "Data for: From Pews to Politics: Religious Sermons and Political Participation in Africa"
+  )
+
 }

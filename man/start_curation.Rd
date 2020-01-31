@@ -20,9 +20,6 @@ start_curation(
 
 \item{repo}{A string. The name of the github repository to be used}
 }
-\value{
-
-}
 \description{
 Initiaties a curation project: Creates gh projects, DB folder, downloads files & filelist
 }

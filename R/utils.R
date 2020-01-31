@@ -1,4 +1,5 @@
 
+
 #' Extracts the first author last name
 #'
 #' @param data a dataverse API object for a dataset
@@ -11,7 +12,16 @@
 #' get_author(data)
 #' }
 get_author <- function(data) {
-  author <- gsub("\\s+", "", gsub(",.*", "", data$metadataBlocks$citation$fields$value[[2]]$authorName$value[1]))
+  author <-
+    gsub(
+      "\\s+",
+      "",
+      gsub(
+        ",.*",
+        "",
+        data$metadataBlocks$citation$fields$value[[2]]$authorName$value[1]
+      )
+    )
   return (author)
 }
 
@@ -32,7 +42,7 @@ get_email <- function(data) {
 
 #' Extracts the title of the datasets from its object
 #'
-#' @param data
+#' @param data A list. The output of dataverse::get_dataset()
 #'
 #' @return The title of the dataset. A string
 #' @export
@@ -42,12 +52,12 @@ get_email <- function(data) {
 #' get_title(data)
 #' }
 get_title <- function(data) {
-  return (data$metadataBlocks$citation[['fields']][1,"value"])
+  return (data$metadataBlocks$citation[['fields']][1, "value"])
 }
 
 #' Creates the QDR link for a dataset
 #'
-#' @param doi
+#' @param doi A string. The doi of a davaser dataset in the form doi:10.1234/5678
 #'
 #' @return the QDR url for a dataset. A string.
 #' @export
@@ -56,7 +66,11 @@ get_title <- function(data) {
 #' url <- get_url("doi:10.5064/F6NUVQRR")
 
 get_url <- function(doi) {
-  return(paste("https://data.qdr.syr.edu/dataset.xhtml?persistentId=", doi, sep=""))
+  return(paste(
+    "https://data.qdr.syr.edu/dataset.xhtml?persistentId=",
+    doi,
+    sep = ""
+  ))
 }
 
 #' Returns a shortened title
@@ -67,10 +81,15 @@ get_url <- function(doi) {
 #' @export
 #' @import stringr
 #' @examples
-#' short_title <- get_shortTitle("Data for: From Pews to Politics: Religious Sermons and Political Participation in Africa")
+#' short_title <- get_shortTitle(
+#'   "Data for: From Pews to Politics: Religious Sermons and Political Participation in Africa"
+#'   )
+#'
+
 get_shortTitle <- function(title) {
-  short_title <- str_remove(title, "(Replication )?[Dd]ata for: ") %>% str_extract("^(.+?\\s){1,5}") %>% str_trim() %>% str_remove(":.+")
-  if (is.na(short_title)){
+  short_title <-
+    str_remove(title, "(Replication )?[Dd]ata for: ") %>% str_extract("^(.+?\\s){1,5}") %>% str_trim() %>% str_remove(":.+")
+  if (is.na(short_title)) {
     short_title <- title
   }
   return(short_title)

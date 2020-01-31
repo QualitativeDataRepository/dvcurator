@@ -58,7 +58,6 @@ download_files <- function (data) {
 #' @param data A dataverse dataset object
 #' @param folder A folder, typically the project's folder on Dropbox
 #'
-#' @return
 #' @export
 #' @description Saves the zip file in the "/Original Deposit" folder in the project folder, and extracts the zip file, minus the Manifest, into the "/QDR Prepared" subfolder
 #' @examples \dontrun{

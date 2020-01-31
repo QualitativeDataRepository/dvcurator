@@ -7,7 +7,7 @@
 get_title(data)
 }
 \arguments{
-\item{data}{}
+\item{data}{A list. The output of dataverse::get_dataset()}
 }
 \value{
 The title of the dataset. A string

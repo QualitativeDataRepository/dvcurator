@@ -7,7 +7,7 @@
 get_url(doi)
 }
 \arguments{
-\item{doi}{}
+\item{doi}{A string. The doi of a davaser dataset in the form doi:10.1234/5678}
 }
 \value{
 the QDR url for a dataset. A string.

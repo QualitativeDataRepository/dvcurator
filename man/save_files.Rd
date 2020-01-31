@@ -13,9 +13,6 @@ save_files(zip, data, folder = getwd())
 
 \item{folder}{A folder, typically the project's folder on Dropbox}
 }
-\value{
-
-}
 \description{
 Saves the zip file in the "/Original Deposit" folder in the project folder, and extracts the zip file, minus the Manifest, into the "/QDR Prepared" subfolder
 }

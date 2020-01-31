@@ -5,7 +5,6 @@
 #' @param owner A string. The owner of the github repository to be used
 #' @param repo A string. The name of the github repository to be used
 #'
-#' @return
 #' @export
 #'
 #' @examples

@@ -1,17 +1,13 @@
-library(dataverse)
-library(dplyr)
-
-
 #' Writes a CSV file of all files pertaining to the current DOI to the specified folder
 #'
-#' @param doi A string. The DOI of a dataset in the form doi:10.1234/5678
-#'
-#' @return
+#' @param data A list. The output of dataverse::get_dataset()
+#' @param folder A filepath. The folder for the file to be saved
 #' @export
 #' @import dataverse
+#' @importFrom utils write.csv
 #' @examples
 #' \dontrun{
-#' export_files("doi:10.5064/F6NUVQRR")
+#' export_files(get_dataset("doi:10.5064/F6NUVQRR"))
 #' }
 export_filelist <- function (data, folder = getwd()) {
   # filename will be author_files_date using todays date
@@ -40,10 +36,16 @@ get_filelist <- function (data) {
 
   # collapse checksum
   data_files$checksum <- data_files$checksum$value
+
+  # collapse categories
+  if (length(data_files$categories)) {
+    data_files$categories <- sapply(data_files$categories, paste, collapse = ", ")
+  }
+
   # select relevant columns; you can edit this list.
   # Use colnames(data_files for a complete list)
-  data_files <- data_files %>% select_if(names(.) %in%
-                       c("label", "description", "restricted", "contentType", "checksum", "directoryLabel"))
+  data_files <- data_files %>% select(one_of(
+                       c("label", "description", "restricted", "categories", "id", "contentType", "checksum", "directoryLabel")))
   return (data_files)
 }
 

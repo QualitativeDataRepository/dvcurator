@@ -7,16 +7,15 @@
 export_filelist(data, folder = getwd())
 }
 \arguments{
-\item{doi}{A string. The DOI of a dataset in the form doi:10.1234/5678}
-}
-\value{
+\item{data}{A list. The output of dataverse::get_dataset()}
 
+\item{folder}{A filepath. The folder for the file to be saved}
 }
 \description{
 Writes a CSV file of all files pertaining to the current DOI to the specified folder
 }
 \examples{
 \dontrun{
-export_files("doi:10.5064/F6NUVQRR")
+export_files(get_dataset("doi:10.5064/F6NUVQRR"))
 }
 }
