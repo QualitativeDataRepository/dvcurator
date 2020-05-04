@@ -12,6 +12,7 @@
 #' get_author(data)
 #' }
 get_author <- function(data) {
+  fields <- data$metadataBlocks$citation$fields
   author <-
     gsub(
       "\\s+",
@@ -19,7 +20,7 @@ get_author <- function(data) {
       gsub(
         ",.*",
         "",
-        data$metadataBlocks$citation$fields$value[[2]]$authorName$value[1]
+        fields$value[[match("author", fields$typeName)]]$authorName$value[1]
       )
     )
   return (author)
