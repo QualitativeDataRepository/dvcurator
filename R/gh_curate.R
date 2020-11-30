@@ -84,12 +84,19 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   - [ ] Enter QDR vocabulary (ICPSR Thesaurus)
   - [ ] Upload files
   - [ ] Tag Data/Documentation
+  - [ ] Restrict files for registered users as required
   - [ ] Authorize file access to registered users
   - [ ] Add terms in both terms of use and terms of access
-  - [ ] Restrict files for registered users as required
+  - [ ] Enable Access Request
+  - [ ] Select thumbnail image
   - [ ] Deposit agreement received from depositor
-  - [ ] Add distribution date
-  - [ ] Depositor Final Review"
+  - [ ] Depositor Final Review
+  - [ ] Curators' Final Review (two sets of eyes, special attention to README and terms fo use/access conditions)
+  - [ ] Add Distribution Date
+  - [ ] Publish
+  - [ ] Super User (SK) verified that archiving was sucessful
+  - [ ] Tweet about data project
+  - [ ] Set Google Scholar Alert (to qualitativedatarepository@gmail.com)"
 
 publication_title <- paste(get_author(data), " - ", short_title," - ", "Publication")
 
