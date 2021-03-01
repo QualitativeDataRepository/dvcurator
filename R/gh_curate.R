@@ -6,7 +6,7 @@ library(stringr)
 
 #' Creates issues and projects in the QDR Github repository
 #'
-#' @param doi A string. The doi of a davaser dataset in the form doi:10.1234/5678
+#' @param doi A string. The doi of a dataverse dataset in the form doi:10.1234/5678
 #' @param owner A string. The owner of the github repository
 #' @param repo A string. The name of the github repo
 #' @export

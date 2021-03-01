@@ -38,7 +38,7 @@ get_author <- function(data) {
 #' get_email(data)
 #' }
 get_email <- function(data) {
-  return (data$metadataBlocks$citation$fields$value[[3]]$datasetContactEmail$value)
+  return (data$metadataBlocks$citation$fields$value[[3]]$datasetContactEmail$value[1])
 }
 
 #' Extracts the title of the datasets from its object
