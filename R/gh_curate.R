@@ -98,7 +98,7 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   - [ ] Super User (SK) verified that archiving was sucessful
   - [ ] Tweet about data project
   - [ ] Set Google Scholar Alert (to qualitativedatarepository@gmail.com)
-  - [ ] Enter total time in [tracking spreadsheet](https://docs.google.com/spreadsheets/d/1KMZvpuhdqpYpLpt0Zd1zB0mq764zMmmE1h4pRX4yCWY/edit#gid=0)"
+  - [ ] Enter total time in [tracking spreadsheet](https://docs.google.com/spreadsheets/d/1WUEO9QQg6Vw0H2yFPlhKXmJc-zHkudiuNpIPut45bHo/edit#gid=1857006720)"
 
 publication_title <- paste(get_author(data), " - ", short_title," - ", "Publication")
 
