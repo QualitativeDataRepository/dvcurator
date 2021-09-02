@@ -57,8 +57,9 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   - [ ] Project is journal supplement
   - If yes: deadline?
   - [ ] Checked human participant issues
-  - [ ] Checked copyright issues",
-                        sep = " "
+  - [ ] Checked copyright issues
+  - [ ] Started tracking time",
+  sep = " "
   )
 
   initial_title <- paste(get_author(data), " - ", short_title," - ", "Initial Deposit & Checks")
@@ -96,7 +97,8 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
   - [ ] Publish
   - [ ] Super User (SK) verified that archiving was sucessful
   - [ ] Tweet about data project
-  - [ ] Set Google Scholar Alert (to qualitativedatarepository@gmail.com)"
+  - [ ] Set Google Scholar Alert (to qualitativedatarepository@gmail.com)
+  - [ ] Enter total time in [tracking spreadsheet](https://docs.google.com/spreadsheets/d/1KMZvpuhdqpYpLpt0Zd1zB0mq764zMmmE1h4pRX4yCWY/edit#gid=0)"
 
 publication_title <- paste(get_author(data), " - ", short_title," - ", "Publication")
 
