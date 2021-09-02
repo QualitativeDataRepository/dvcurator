@@ -100,6 +100,14 @@ gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Cu
 
 publication_title <- paste(get_author(data), " - ", short_title," - ", "Publication")
 
+
+
+  time_text <-"Please keep track of time worked on curation for this project in comments to this issue"
+
+  time_title <- paste(get_author(data), " - ", short_title," - ", "Time tracking")
+
+
+
   # Create Issues
 
   metadata_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = metadata_title, body = metadata_text)
@@ -113,7 +121,10 @@ print(paste("Created issue", metadata_title))
   publication_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = publication_title, body = publication_text)
   print(paste("Created issue", publication_title))
 
-  issues <- list(metadata_issue, initial_issue, fileprocessing_issue, publication_issue)
+  time_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = time_title, body = time_text)
+  print(paste("Created issue", time_title))
+
+  issues <- list(metadata_issue, initial_issue, fileprocessing_issue, publication_issue, time_issue)
 
   project <- gh("POST /repos/:owner/:repo/projects", owner = owner, repo= repo, name = paste(get_author(data), " - ", short_title, sep=""), .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
 
