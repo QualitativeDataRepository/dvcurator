@@ -11,7 +11,8 @@
 #' \dontrun{
 #' start_curation("doi:10.5064/F6NUVQRR", folder = "C:/Users/Sebastian/Dropbox (QDR)")
 #' }
-start_curation <- function(doi, folder = getwd(), owner = "QualitativeDataRepository", repo = "Project-Curation") {
+start_curation <- function(doi, folder = getwd(), owner = "QualitativeDataRepository", repo = "Project-Curation",
+                           issues=c("metadata", "initial_checks", "file_processing", "publication", "time")) {
   # Make sure keys are set
   if (Sys.getenv("DATAVERSE_KEY") == "") {
     stop("Please set a QDR API key using sys.sentenv('DATAVERSE_KEY' = 'key')")
@@ -26,7 +27,7 @@ start_curation <- function(doi, folder = getwd(), owner = "QualitativeDataReposi
   data <- dataverse::get_dataset(doi)
 
   # Create github projects
-  gh_curate(doi, owner, repo)
+  gh_curate(doi, owner, repo, issues)
 
   # create DB folders
   folderpath <- create_folder(data, folder)

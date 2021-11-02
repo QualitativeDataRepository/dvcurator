@@ -17,130 +17,65 @@ library(stringr)
 #' \dontrun{
 #' gh_curate("doi:10.5064/F6NUVQRR")
 #' }
-gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Curation") {
+gh_curate <- function(doi, owner = "QualitativeDataRepository", repo="Project-Curation",
+                      tickets=c("metadata", "initial_checks", "file_processing", "publication", "time")) {
+
 
   # Get the dataset data
-  data <- get_dataset(doi)
-
+  data <- dataverse::get_dataset(doi)
   short_title <- get_shortTitle(get_title(data))
-  metadata_text <- 'Not all of these need to be completed, but check if available/possible
+  generic_title <- paste(get_author(data), " - ", short_title)
 
-  - [ ] Funder
-  - [ ] depositor ORCID
-  - [ ] Check depositor affiliation
-  - [ ] Other contributors
-  - [ ] Associated publications
-  - [ ] Collection dates
-  - [ ] Temporal coverage of data itself
-  - [ ] Geographic coverage
-  - [ ] Project Summary: Abstract
-  - [ ] Data Abstract:
-     - [ ] What are the data (interviews, focus groups, PDFs of XYZ)?
-     - [ ] How where data selected (e.g., picking interviewees, selection among archival documents, etc.)?
-     - [ ] Data collections strategy: both technical (scans/camera) and more substantial (interview/focus groups) -- though full guide should be separate document
-     - [ ] How are they organized / will be organized for publication.
-  - [ ] Access restrictions: on which files, under what conditions.
-  '
-
-  metadata_title <- paste(get_author(data), " - ", short_title," - ", "Metadata")
-
-  initial_text <- paste("
-  ## Information
-
-  Contact
+  contact_info <- paste("Contact
   Name:", get_author(data),"
   e-mail:", get_email(data),"
-  DV link:", get_url(doi),"
+  DV link:", get_url(doi),
+                sep = " ")
 
-  ## General Considerations
-  - [ ] Project is in Scope
-  - [ ] Project is journal supplement
-  - If yes: deadline?
-  - [ ] Checked human participant issues
-  - [ ] Checked copyright issues
-  - [ ] Started tracking time",
-  sep = " "
-  )
+  # This lapply() creates issues for each specificed ticket and returns a list of their gh objects
+  issues <- lapply(tickets, FUN=function(ticket, owner, repo, generic_title) {
+    # Actual title of the ticket is rendered here
+    title <- paste(generic_title, "-",
+                   stringr::str_to_title(gsub("_", " ", ticket)))
 
-  initial_title <- paste(get_author(data), " - ", short_title," - ", "Initial Deposit & Checks")
+    file <- paste0("tickets/", ticket, ".md")
+    if (!file.exists(file)) {
+      stop(paste(file, "is missing"))
+    }
 
-  fileprocessing_text <- "Not all of these need to be completed, but check if available/possible
+    body <- readLines(file)
+    body <- paste(body, collapse="\n") # Read the file into a single vector
+    message(paste("Created issue", title))
 
-  - [ ] Create Dropbox Folder
-  - [ ] Redactions
-  - [ ] Rename Files
-  - [ ] Enter File Metadata
-  - [ ] OCR
-  - [ ] Convert to PDF/A
-  - [ ] Create Permanent Record of Web Sources
-  - [ ] Create Readme File
-  - [ ] Archive Files"
+    gh("POST /repos/:owner/:repo/issues",
+                owner = owner, repo=repo,
+                title = title, body = body)
 
-  fileprocessing_title <- paste(get_author(data), " - ", short_title," - ", "File Processing")
+  }, owner, repo, generic_title)
 
-  publication_text <- "Not all of these need to be completed, but check if available/possible
-
-  - [ ] Assign depositor to project
-  - [ ] Review metadata entry
-  - [ ] Enter QDR vocabulary (ICPSR Thesaurus)
-  - [ ] Upload files
-  - [ ] Tag Data/Documentation
-  - [ ] Restrict files for registered users as required
-  - [ ] Authorize file access to registered users
-  - [ ] Add terms in both terms of use and terms of access
-  - [ ] Enable Access Request
-  - [ ] Select thumbnail image
-  - [ ] Deposit agreement received from depositor
-  - [ ] Depositor Final Review
-  - [ ] Curators' Final Review (two sets of eyes, special attention to README and terms fo use/access conditions)
-  - [ ] Add Distribution Date
-  - [ ] Publish
-  - [ ] Super User (SK) verified that archiving was sucessful
-  - [ ] Tweet about data project
-  - [ ] Set Google Scholar Alert (to qualitativedatarepository@gmail.com)
-  - [ ] Enter total time in [tracking spreadsheet](https://docs.google.com/spreadsheets/d/1WUEO9QQg6Vw0H2yFPlhKXmJc-zHkudiuNpIPut45bHo/edit#gid=1857006720)"
-
-publication_title <- paste(get_author(data), " - ", short_title," - ", "Publication")
-
-
-
-  time_text <-"Please keep track of time worked on curation for this project in comments to this issue"
-
-  time_title <- paste(get_author(data), " - ", short_title," - ", "Time tracking")
-
-
-
-  # Create Issues
-
-  metadata_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = metadata_title, body = metadata_text)
-print(paste("Created issue", metadata_title))
-  initial_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = initial_title, body = initial_text)
-  print(paste("Created issue", initial_title))
-
-  fileprocessing_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = fileprocessing_title, body = fileprocessing_text)
-  print(paste("Created issue", fileprocessing_title))
-
-  publication_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = publication_title, body = publication_text)
-  print(paste("Created issue", publication_title))
-
-  time_issue <- gh("POST /repos/:owner/:repo/issues", owner = owner, repo= repo, title = time_title, body = time_text)
-  print(paste("Created issue", time_title))
-
-  issues <- list(metadata_issue, initial_issue, fileprocessing_issue, publication_issue, time_issue)
-
-  project <- gh("POST /repos/:owner/:repo/projects", owner = owner, repo= repo, name = paste(get_author(data), " - ", short_title, sep=""), .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
+  project <- gh("POST /repos/:owner/:repo/projects", owner = owner, repo= repo,
+                name = generic_title, body=contact_info,
+                .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
 
   projectID <- project$id
 
-  toDo <- gh("POST /projects/:project_id/columns", project_id = projectID, name = "To do", .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
+  toDo <- gh("POST /projects/:project_id/columns", project_id = projectID,
+             name = "To do",
+             .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
 
-  inProgress <- gh("POST /projects/:project_id/columns", project_id = projectID, name = "In progress", .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
+  inProgress <- gh("POST /projects/:project_id/columns", project_id = projectID,
+                   name = "In progress",
+                   .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
 
-  done <- gh("POST /projects/:project_id/columns", project_id = projectID, name = "Done", .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
+  done <- gh("POST /projects/:project_id/columns", project_id = projectID,
+             name = "Done",
+             .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
 
   toDoID <- toDo$id
 
   for (issue in issues) {
-    issueCard <- gh("POST /projects/columns/:column_id/cards", column_id = toDoID, content_id = issue$id, content_type = "Issue", .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
+    issueCard <- gh("POST /projects/columns/:column_id/cards", column_id = toDoID, content_id = issue$id,
+                    content_type = "Issue",
+                    .send_headers = c(Accept = "application/vnd.github.inertia-preview+json"))
   }
 }
